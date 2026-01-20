@@ -136,7 +136,18 @@ List all available cleaners.
 
 ## Installation
 
-### pipx (Recommended)
+### Quick Install (Recommended)
+
+```bash
+curl -sSL https://raw.githubusercontent.com/elexingyu/cc-cleaner/master/install.sh | bash
+```
+
+This script automatically:
+- Checks for Python 3.10+
+- Installs pipx if needed
+- Installs cc-cleaner
+
+### pipx
 
 ```bash
 pipx install cc-cleaner
