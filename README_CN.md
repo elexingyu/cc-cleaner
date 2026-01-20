@@ -6,20 +6,20 @@
 
 [English](README.md) | [中文](README_CN.md)
 
-**The cache cleaner for the AI Coding era.**
+**AI 编程时代的缓存清理工具**
 
 > cc = Claude Code / Cursor / Copilot / Coding Cache
 
-In the AI Coding era, your disk fills up 10x faster—rapid project iteration, massive conversation logs, exploding package caches. `cc-cleaner` knows exactly what to clean.
+AI 编程时代，磁盘空间消耗速度是以前的 10 倍——快速迭代的项目、海量对话记录、爆炸式增长的包缓存。`cc-cleaner` 精准清理这些垃圾。
 
-## Install
+## 安装
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/elexingyu/cc-cleaner/master/install.sh | bash
 ```
 
 <details>
-<summary>Other installation methods</summary>
+<summary>其他安装方式</summary>
 
 ```bash
 pipx install cc-cleaner   # pipx
@@ -28,16 +28,16 @@ pip install cc-cleaner     # pip
 ```
 </details>
 
-## Usage
+## 使用
 
 ```bash
-cc-cleaner status          # See what's eating your disk
-cc-cleaner clean all       # Clean all safe caches
-cc-cleaner clean claude    # Clean specific tool
-cc-cleaner clean all -n    # Dry run (preview only)
+cc-cleaner status          # 查看磁盘占用
+cc-cleaner clean all       # 清理所有安全缓存
+cc-cleaner clean claude    # 清理指定工具
+cc-cleaner clean all -n    # 预览模式（不实际删除）
 ```
 
-**Example output:**
+**示例输出：**
 
 ```
 $ cc-cleaner status
@@ -55,27 +55,27 @@ $ cc-cleaner status
 Total cleanable: 7.5 GB
 ```
 
-## Supported Cleaners
+## 支持的清理器
 
-| Category | Tools |
-|----------|-------|
-| **AI Coding** | Claude Code |
+| 分类 | 工具 |
+|------|------|
+| **AI 编程** | Claude Code |
 | **JavaScript** | npm, yarn, pnpm |
 | **Python** | pip, uv |
-| **Others** | cargo, go, gradle, cocoapods, homebrew, docker |
+| **其他** | cargo, go, gradle, cocoapods, homebrew, docker |
 
-## Risk Levels
+## 风险等级
 
-| Level | Cleaned By Default | Examples |
-|-------|-------------------|----------|
-| **Safe** | Yes | Download caches, logs, telemetry |
-| **Moderate** | `--force` | Conversation transcripts, shared stores |
-| **Dangerous** | `--force` | Docker system prune |
+| 等级 | 默认清理 | 示例 |
+|------|---------|------|
+| **Safe** | 是 | 下载缓存、日志、遥测数据 |
+| **Moderate** | 需 `--force` | 对话记录、共享存储 |
+| **Dangerous** | 需 `--force` | Docker 系统清理 |
 
-## Contributing
+## 贡献
 
-PRs welcome for **Cursor**, **GitHub Copilot**, **Windsurf**, and other AI coding tools!
+欢迎提交 PR 支持 **Cursor**、**GitHub Copilot**、**Windsurf** 等 AI 编程工具！
 
-## License
+## 许可证
 
 MIT
