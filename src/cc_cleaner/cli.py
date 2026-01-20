@@ -4,14 +4,14 @@ from typing import Optional
 
 import typer
 
-from dev_cleaner.core import (
+from cc_cleaner.core import (
     RiskLevel,
     execute_clean_all,
     get_all_cleaner_infos,
     get_cleaner,
     get_cleaner_names,
 )
-from dev_cleaner.ui import (
+from cc_cleaner.ui import (
     confirm_clean,
     console,
     print_clean_results,
@@ -23,7 +23,7 @@ from dev_cleaner.ui import (
 )
 
 # Import all cleaners to register them
-import dev_cleaner.cleaners  # noqa: F401
+import cc_cleaner.cleaners  # noqa: F401
 
 app = typer.Typer(
     name="dev-cleaner",

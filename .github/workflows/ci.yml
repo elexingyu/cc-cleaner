@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --dev
       - name: Run mypy
-        run: uv run mypy src/dev_cleaner
+        run: uv run mypy src/cc_cleaner
         continue-on-error: true  # Type checking is informational for now
 
   test:
@@ -58,11 +58,11 @@ jobs:
       - name: Install package
         run: uv sync
       - name: Test CLI help
-        run: uv run dev-cleaner --help
+        run: uv run cc-cleaner --help
       - name: Test list command
-        run: uv run dev-cleaner list
+        run: uv run cc-cleaner list
       - name: Test status command
-        run: uv run dev-cleaner status
+        run: uv run cc-cleaner status
 
   build:
     runs-on: ubuntu-latest

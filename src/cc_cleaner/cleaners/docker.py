@@ -3,7 +3,7 @@
 import shutil
 import subprocess
 
-from dev_cleaner.core import (
+from cc_cleaner.core import (
     BaseCleaner,
     CleanMethod,
     CleanTarget,

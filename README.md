@@ -1,222 +1,236 @@
-# dev-cleaner
+# cc-cleaner
 
-[![PyPI version](https://badge.fury.io/py/dev-cleaner.svg)](https://badge.fury.io/py/dev-cleaner)
+[![PyPI version](https://badge.fury.io/py/cc-cleaner.svg)](https://badge.fury.io/py/cc-cleaner)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A CLI tool to clean development caches and free disk space. Supports npm, pip, Cargo, Docker, Homebrew, Claude Code, and more.
+**The cache cleaner for the AI Coding era.**
 
-## Installation
+> cc = Claude Code / Cursor / Copilot / Coding Cache
 
-### Using pipx (recommended)
+## The Problem
+
+In the AI Coding era, tools like **Claude Code**, **Cursor**, and **GitHub Copilot** have revolutionized how we write code. But there's a hidden cost:
+
+- **Rapid project iteration** - AI helps you scaffold projects in seconds, leaving behind `node_modules`, `venv`, build artifacts
+- **Massive conversation logs** - Claude Code stores every conversation as `.jsonl` files (can grow to GB!)
+- **Cache explosion** - Package managers (npm, pip, cargo) cache everything you've ever installed
+- **Debug & telemetry data** - AI tools generate tons of logs and telemetry
+
+**Result:** Your disk fills up 10x faster than before.
+
+## The Solution
+
+`cc-cleaner` is built specifically for AI-assisted developers. It knows exactly what to clean:
 
 ```bash
-pipx install dev-cleaner
-```
+# Install
+pipx install cc-cleaner
 
-### Using uv
+# See what's eating your disk
+cc-cleaner status
 
-```bash
-uv tool install dev-cleaner
-```
-
-### Using pip
-
-```bash
-pip install dev-cleaner
+# Clean safely
+cc-cleaner clean
 ```
 
 ## Quick Start
 
 ```bash
-# Show status of all cleaners with disk usage
-dev-cleaner status
+# Show all cleanable caches with sizes
+cc-cleaner status
 
-# Show status for a specific cleaner
-dev-cleaner status npm
+# Clean all safe targets (dry run first)
+cc-cleaner clean --dry-run
 
-# Clean all safe targets (dry run)
-dev-cleaner clean --dry-run
+# Actually clean
+cc-cleaner clean
 
-# Clean all safe targets
-dev-cleaner clean
-
-# Clean a specific cleaner
-dev-cleaner clean npm
-
-# Clean with confirmation prompts disabled
-dev-cleaner clean -y
-
-# List all available cleaners
-dev-cleaner list
+# Clean specific tool
+cc-cleaner clean claude
+cc-cleaner clean npm
 ```
 
-## Supported Cleaners
+## What It Cleans
 
-| Cleaner | Description | Default Risk |
-|---------|-------------|--------------|
-| `npm` | npm package cache (`~/.npm/_cacache`, `~/.npm/_logs`) | Safe |
-| `yarn` | Yarn package cache | Safe |
-| `pnpm` | pnpm store and cache | Moderate |
-| `pip` | pip package cache | Safe |
-| `uv` | uv Python package cache | Safe |
-| `cargo` | Cargo (Rust) registry and git cache | Safe |
-| `go` | Go module and build cache | Safe |
-| `gradle` | Gradle caches and daemon | Moderate |
-| `cocoapods` | CocoaPods cache and repos (macOS) | Moderate |
-| `homebrew` | Homebrew download cache (macOS) | Safe |
-| `docker` | Docker build cache, images, system prune | Dangerous |
-| `claude` | Claude Code debug logs, telemetry, transcripts | Safe/Moderate |
+### AI Coding Tools
+
+| Tool | What's Cleaned | Risk |
+|------|----------------|------|
+| **Claude Code** | Debug logs, telemetry, conversation transcripts (`.jsonl`) | Safe/Moderate |
+
+### Package Managers
+
+| Tool | What's Cleaned | Risk |
+|------|----------------|------|
+| **npm** | `~/.npm/_cacache`, `~/.npm/_logs` | Safe |
+| **yarn** | Yarn cache, Berry cache | Safe |
+| **pnpm** | Store, metadata cache | Moderate |
+| **pip** | `~/.cache/pip` | Safe |
+| **uv** | `~/.cache/uv` | Safe |
+| **cargo** | Registry cache, git deps | Safe |
+| **go** | Module cache, build cache | Safe |
+
+### Build Tools & IDEs
+
+| Tool | What's Cleaned | Risk |
+|------|----------------|------|
+| **Gradle** | Caches, daemon, wrapper dists | Moderate |
+| **CocoaPods** | Specs repos, download cache | Moderate |
+| **Homebrew** | Download cache, logs | Safe |
+| **Docker** | Build cache, dangling images, system prune | Safe/Dangerous |
 
 ## Commands
 
-### `status [CLEANER]`
+### `cc-cleaner status [CLEANER]`
 
-Show disk usage for all cleaners or a specific one.
-
-```bash
-dev-cleaner status          # All cleaners
-dev-cleaner status npm      # Only npm
-dev-cleaner status --json   # JSON output
-```
-
-### `clean [CLEANER]`
-
-Clean caches. By default, only cleans targets with risk level "safe".
+Show disk usage. See how much space you can reclaim.
 
 ```bash
-dev-cleaner clean                    # Clean all safe targets
-dev-cleaner clean npm                # Clean only npm
-dev-cleaner clean --dry-run          # Preview without deleting
-dev-cleaner clean --include-moderate # Include moderate-risk targets
-dev-cleaner clean --force            # Include dangerous targets (use with caution!)
-dev-cleaner clean -y                 # Skip confirmation prompts
+cc-cleaner status          # All cleaners
+cc-cleaner status claude   # Only Claude Code
+cc-cleaner status --json   # JSON output for scripts
 ```
 
-### `list`
+### `cc-cleaner clean [CLEANER]`
+
+Clean caches. Safe by default.
+
+```bash
+cc-cleaner clean                    # Clean all safe targets
+cc-cleaner clean npm                # Clean only npm
+cc-cleaner clean --dry-run          # Preview only
+cc-cleaner clean --include-moderate # Include moderate-risk targets
+cc-cleaner clean --force            # Include dangerous targets
+cc-cleaner clean -y                 # Skip confirmation
+```
+
+### `cc-cleaner list`
 
 List all available cleaners.
 
-```bash
-dev-cleaner list
-```
-
 ## Risk Levels
 
-Each clean target has a risk level that determines when it will be cleaned:
-
-| Level | Description | When Cleaned |
-|-------|-------------|--------------|
-| **Safe** | Quick to rebuild, no significant impact | Default (`clean`) |
+| Level | Description | Cleaned By Default |
+|-------|-------------|-------------------|
+| **Safe** | Quick to rebuild, no impact | Yes |
 | **Moderate** | May take time to rebuild | With `--include-moderate` |
-| **Dangerous** | Significant impact, data loss possible | With `--force` |
+| **Dangerous** | Potential data loss | With `--force` |
 
-### Examples by Risk Level
+### What's Safe?
 
-**Safe:**
-- npm/pip/cargo download caches
-- Build caches (Go, Docker builder)
-- Log files
+- npm/pip/cargo download caches (re-download on demand)
+- Build caches (rebuild automatically)
+- Log files (you probably don't need them)
+- Claude Code telemetry/debug logs
 
-**Moderate:**
-- pnpm content-addressable store
-- Gradle dependency cache
-- Claude Code conversation transcripts
+### What's Moderate?
 
-**Dangerous:**
+- Claude Code conversation transcripts (your chat history!)
+- pnpm store (shared across projects)
+- Gradle dependencies (slow to re-download)
+
+### What's Dangerous?
+
 - Docker system prune (removes all unused images/containers)
 
-## Safety Features
+## Installation
 
-- **Dry run mode**: Preview what will be deleted with `--dry-run`
-- **Risk-based filtering**: Only safe targets are cleaned by default
-- **Confirmation prompts**: Interactive confirmation before destructive operations
-- **Detailed output**: Shows exactly what's being cleaned and how much space is freed
-
-## Examples
-
-### Free up disk space quickly
+### pipx (Recommended)
 
 ```bash
-# See what's taking space
-dev-cleaner status
-
-# Clean all safe caches
-dev-cleaner clean -y
-
-# If you need more space, include moderate-risk targets
-dev-cleaner clean --include-moderate -y
+pipx install cc-cleaner
 ```
 
-### Clean specific tool caches
+### uv
 
 ```bash
-# After npm issues, clear the cache
-dev-cleaner clean npm
-
-# Clean Python package caches (pip + uv)
-dev-cleaner clean pip
-dev-cleaner clean uv
-
-# Clean Rust build artifacts
-dev-cleaner clean cargo
+uv tool install cc-cleaner
 ```
 
-### Docker cleanup
+### pip
 
 ```bash
-# Safe: only build cache
-dev-cleaner clean docker
+pip install cc-cleaner
+```
 
-# Aggressive: full system prune (requires --force)
-dev-cleaner clean docker --force
+## Real World Usage
+
+### Weekly Cleanup Routine
+
+```bash
+# Check what's taking space
+cc-cleaner status
+
+# Clean safe stuff (no confirmation needed)
+cc-cleaner clean -y
+
+# Review and clean moderate stuff
+cc-cleaner clean --include-moderate
+```
+
+### After Heavy AI Coding Session
+
+```bash
+# Claude Code transcripts can grow huge
+cc-cleaner status claude
+
+# Clean old conversations (keep your sanity and disk space)
+cc-cleaner clean claude --include-moderate
+```
+
+### Before Running Low on Disk
+
+```bash
+# Nuclear option - clean everything safe + moderate
+cc-cleaner clean --include-moderate -y
+
+# Check Docker specifically
+cc-cleaner status docker
+cc-cleaner clean docker --force  # If you really need space
 ```
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-### Adding a New Cleaner
-
-1. Create a new file in `src/dev_cleaner/cleaners/`
-2. Implement a class that inherits from `BaseCleaner`
-3. Implement the `get_targets()` method
-4. Register with `@register_cleaner` decorator
-
-Example:
+Adding a new cleaner is easy:
 
 ```python
-from dev_cleaner.core import (
-    BaseCleaner,
-    CleanMethod,
-    CleanTarget,
-    RiskLevel,
-    expand_path,
-    get_dir_size,
-    register_cleaner,
+from cc_cleaner.core import (
+    BaseCleaner, CleanMethod, CleanTarget, RiskLevel,
+    expand_path, get_dir_size, register_cleaner,
 )
 
 @register_cleaner
 class MyCleaner(BaseCleaner):
     name = "my-tool"
-    description = "My tool caches"
+    description = "My AI coding tool caches"
     risk_level = RiskLevel.SAFE
 
     def get_targets(self) -> list[CleanTarget]:
-        cache_path = expand_path("~/.my-tool/cache")
+        cache = expand_path("~/.my-tool/cache")
         return [
             CleanTarget(
                 name="my-tool/cache",
-                path=cache_path,
-                description="My tool download cache",
+                path=cache,
+                description="My tool cache",
                 risk_level=RiskLevel.SAFE,
                 clean_method=CleanMethod.DELETE_DIR,
-                size_bytes=get_dir_size(cache_path) if cache_path.exists() else 0,
-                exists=cache_path.exists(),
+                size_bytes=get_dir_size(cache) if cache.exists() else 0,
+                exists=cache.exists(),
             )
         ]
 ```
 
+PRs welcome for:
+- **Cursor** cache locations
+- **GitHub Copilot** cache locations
+- **Windsurf** / other AI coding tools
+- Any tool that AI coders frequently use
+
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT
+
+---
+
+**Built for the AI Coding era.** Stop running out of disk space.

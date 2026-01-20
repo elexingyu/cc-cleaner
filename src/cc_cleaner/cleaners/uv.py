@@ -1,6 +1,6 @@
 """uv (Python package manager) cache cleaner."""
 
-from dev_cleaner.core import (
+from cc_cleaner.core import (
     BaseCleaner,
     CleanMethod,
     CleanTarget,

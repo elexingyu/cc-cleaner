@@ -6,7 +6,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskPr
 from rich.table import Table
 from rich.text import Text
 
-from dev_cleaner.core import CleanerInfo, CleanResult, RiskLevel, format_size
+from cc_cleaner.core import CleanerInfo, CleanResult, RiskLevel, format_size
 
 console = Console()
 
