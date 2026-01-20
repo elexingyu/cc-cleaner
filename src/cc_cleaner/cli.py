@@ -32,6 +32,7 @@ app = typer.Typer(
     name="cc-cleaner",
     help="The cache cleaner for the AI Coding era",
     no_args_is_help=True,
+    add_completion=False,
 )
 
 
