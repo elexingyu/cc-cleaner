@@ -1,0 +1,74 @@
+[project]
+name = "dev-cleaner"
+version = "0.1.0"
+description = "CLI tool to clean development caches and free disk space"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "elexingyu", email = "elexingyu@gmail.com" }
+]
+keywords = [
+    "cli",
+    "cache",
+    "cleanup",
+    "development",
+    "disk-space",
+    "npm",
+    "pip",
+    "cargo",
+    "docker",
+    "homebrew",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = [
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/elexingyu/dev-cleaner"
+Repository = "https://github.com/elexingyu/dev-cleaner"
+Issues = "https://github.com/elexingyu/dev-cleaner/issues"
+
+[project.scripts]
+dev-cleaner = "dev_cleaner.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/dev_cleaner"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dev_cleaner"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src" = ""
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
