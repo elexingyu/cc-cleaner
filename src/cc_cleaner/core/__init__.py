@@ -19,6 +19,7 @@ from .registry import (
     register_cleaner,
 )
 from .scanner import expand_path, get_dir_size, get_files_size, path_exists
+from .version import check_for_update, get_current_version, get_upgrade_message
 
 __all__ = [
     "BaseCleaner",
@@ -40,4 +41,7 @@ __all__ = [
     "get_dir_size",
     "get_files_size",
     "path_exists",
+    "check_for_update",
+    "get_current_version",
+    "get_upgrade_message",
 ]

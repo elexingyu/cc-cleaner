@@ -6,10 +6,12 @@ import typer
 
 from cc_cleaner.core import (
     RiskLevel,
+    check_for_update,
     execute_clean_all,
     get_all_cleaner_infos,
     get_cleaner,
     get_cleaner_names,
+    get_upgrade_message,
 )
 from cc_cleaner.ui import (
     confirm_clean,
@@ -27,10 +29,21 @@ from cc_cleaner.ui import (
 import cc_cleaner.cleaners  # noqa: F401
 
 app = typer.Typer(
-    name="dev-cleaner",
-    help="Clean development caches and free disk space",
+    name="cc-cleaner",
+    help="The cache cleaner for the AI Coding era",
     no_args_is_help=True,
 )
+
+
+def _check_and_notify_update() -> None:
+    """Check for updates and print notification if available."""
+    try:
+        latest = check_for_update()
+        if latest:
+            console.print()
+            console.print(get_upgrade_message(latest))
+    except Exception:
+        pass  # Silently ignore any errors
 
 
 @app.command()
@@ -68,6 +81,8 @@ def status(
                 progress.advance(task)
 
         print_status_table(infos, show_all=all)
+
+    _check_and_notify_update()
 
 
 @app.command()
@@ -143,12 +158,25 @@ def clean(
 
     print_clean_results(results, dry_run=dry_run)
 
+    _check_and_notify_update()
+
 
 @app.command(name="list")
 def list_cleaners() -> None:
     """List all available cleaners."""
     infos = get_all_cleaner_infos()
     print_cleaner_list(infos)
+
+    _check_and_notify_update()
+
+
+@app.command(name="version")
+def show_version() -> None:
+    """Show the current version."""
+    from cc_cleaner.core import get_current_version
+
+    console.print(f"cc-cleaner [bold]{get_current_version()}[/bold]")
+    _check_and_notify_update()
 
 
 def main() -> None:
