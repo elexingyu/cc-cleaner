@@ -194,3 +194,15 @@ def create_progress() -> Progress:
         TaskProgressColumn(),
         console=console,
     )
+
+
+def create_scan_progress() -> Progress:
+    """Create a progress bar for scanning caches."""
+    return Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(bar_width=30),
+        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+        console=console,
+        transient=True,  # Remove progress bar when done
+    )

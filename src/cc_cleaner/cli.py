@@ -14,6 +14,7 @@ from cc_cleaner.core import (
 from cc_cleaner.ui import (
     confirm_clean,
     console,
+    create_scan_progress,
     print_clean_results,
     print_cleaner_detail,
     print_cleaner_list,
@@ -53,9 +54,19 @@ def status(
         info = c.get_info()
         print_cleaner_detail(info)
     else:
-        # Show all cleaners
-        with console.status("[bold]Scanning caches...[/bold]"):
-            infos = get_all_cleaner_infos()
+        # Show all cleaners with progress
+        from cc_cleaner.core import get_all_cleaners
+
+        cleaners_list = get_all_cleaners()
+        infos = []
+
+        with create_scan_progress() as progress:
+            task = progress.add_task("Scanning...", total=len(cleaners_list))
+            for c in cleaners_list:
+                progress.update(task, description=f"Scanning [cyan]{c.name}[/cyan]...")
+                infos.append(c.get_info())
+                progress.advance(task)
+
         print_status_table(infos, show_all=all)
 
 
@@ -90,8 +101,10 @@ def clean(
     all_targets = []
     cleaner_names_to_clean = []
 
-    with console.status("[bold]Scanning caches...[/bold]"):
+    with create_scan_progress() as progress:
+        task = progress.add_task("Scanning...", total=len(cleaners))
         for name in cleaners:
+            progress.update(task, description=f"Scanning [cyan]{name}[/cyan]...")
             c = get_cleaner(name)
             if c:
                 targets = c.get_targets()
@@ -99,6 +112,7 @@ def clean(
                 if available_targets:
                     all_targets.extend(available_targets)
                     cleaner_names_to_clean.append(name)
+            progress.advance(task)
 
     if not all_targets:
         console.print("[dim]Nothing to clean.[/dim]")
