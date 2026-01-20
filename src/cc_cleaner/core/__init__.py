@@ -19,6 +19,7 @@ from .registry import (
     register_cleaner,
 )
 from .scanner import expand_path, get_dir_size, get_files_size, path_exists
+from .security import SecurityError, validate_command, validate_path_for_deletion
 from .version import check_for_update, get_current_version, get_upgrade_message
 
 __all__ = [
@@ -44,4 +45,7 @@ __all__ = [
     "check_for_update",
     "get_current_version",
     "get_upgrade_message",
+    "SecurityError",
+    "validate_command",
+    "validate_path_for_deletion",
 ]

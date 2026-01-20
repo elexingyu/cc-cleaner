@@ -98,7 +98,7 @@ class DockerCleaner(BaseCleaner):
                 description="Docker build cache",
                 risk_level=RiskLevel.SAFE,
                 clean_method=CleanMethod.COMMAND,
-                command="docker builder prune -f",
+                command=["docker", "builder", "prune", "-f"],
                 size_bytes=build_cache_size,
                 exists=build_cache_size > 0,
             )
@@ -112,7 +112,7 @@ class DockerCleaner(BaseCleaner):
                 description="Docker dangling images (untagged)",
                 risk_level=RiskLevel.MODERATE,
                 clean_method=CleanMethod.COMMAND,
-                command="docker image prune -f",
+                command=["docker", "image", "prune", "-f"],
                 size_bytes=0,  # Hard to estimate
                 exists=True,  # Assume there might be some
             )
@@ -127,7 +127,7 @@ class DockerCleaner(BaseCleaner):
                 description="Docker full system prune (all unused data)",
                 risk_level=RiskLevel.DANGEROUS,
                 clean_method=CleanMethod.COMMAND,
-                command="docker system prune -af",
+                command=["docker", "system", "prune", "-af"],
                 size_bytes=total_size,
                 exists=total_size > 0,
             )

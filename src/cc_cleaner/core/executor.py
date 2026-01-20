@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .base import CleanMethod, CleanResult, CleanTarget, RiskLevel
 from .scanner import get_dir_size
+from .security import SecurityError, validate_command, validate_path_for_deletion
 
 
 def delete_directory(path: Path, dry_run: bool = False) -> tuple[bool, int, str | None]:
@@ -13,13 +14,23 @@ def delete_directory(path: Path, dry_run: bool = False) -> tuple[bool, int, str 
     if not path.exists():
         return True, 0, None
 
+    # Security check
+    try:
+        validate_path_for_deletion(path)
+    except SecurityError as e:
+        return False, 0, f"Security check failed: {e}"
+
     size = get_dir_size(path)
 
     if dry_run:
         return True, size, None
 
     try:
-        shutil.rmtree(path)
+        # Check if path is a symlink - delete the symlink, not the target
+        if path.is_symlink():
+            path.unlink()
+        else:
+            shutil.rmtree(path)
         return True, size, None
     except Exception as e:
         return False, 0, str(e)
@@ -32,18 +43,34 @@ def delete_files(
     if not path.exists():
         return True, 0, None
 
+    # Security check on base path
+    try:
+        validate_path_for_deletion(path)
+    except SecurityError as e:
+        return False, 0, f"Security check failed: {e}"
+
     total_freed = 0
     errors = []
 
     try:
         for entry in path.glob(pattern):
             try:
-                if entry.is_file() and not entry.is_symlink():
+                # Skip symlinks entirely for safety
+                if entry.is_symlink():
+                    continue
+
+                if entry.is_file():
                     size = entry.stat().st_size
                     if not dry_run:
                         entry.unlink()
                     total_freed += size
-                elif entry.is_dir() and not entry.is_symlink():
+                elif entry.is_dir():
+                    # Validate each subdirectory before deletion
+                    try:
+                        validate_path_for_deletion(entry)
+                    except SecurityError:
+                        continue  # Skip unsafe paths silently
+
                     size = get_dir_size(entry)
                     if not dry_run:
                         shutil.rmtree(entry)
@@ -59,15 +86,25 @@ def delete_files(
     return True, total_freed, None
 
 
-def run_command(command: str, dry_run: bool = False) -> tuple[bool, int, str | None]:
-    """Run a cleanup command and return (success, freed_bytes, error)."""
+def run_command(command: list[str], dry_run: bool = False) -> tuple[bool, int, str | None]:
+    """Run a cleanup command and return (success, freed_bytes, error).
+
+    Args:
+        command: Command as a list of strings (NOT a shell string)
+        dry_run: If True, don't actually run the command
+    """
     if dry_run:
         return True, 0, None
 
+    # Security check - only allow whitelisted commands
+    try:
+        validate_command(command)
+    except SecurityError as e:
+        return False, 0, f"Security check failed: {e}"
+
     try:
         result = subprocess.run(
-            command,
-            shell=True,
+            command,  # List form, no shell=True
             capture_output=True,
             text=True,
             timeout=300,

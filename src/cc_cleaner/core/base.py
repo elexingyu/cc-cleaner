@@ -31,7 +31,7 @@ class CleanTarget:
     description: str
     risk_level: RiskLevel = RiskLevel.SAFE
     clean_method: CleanMethod = CleanMethod.DELETE_DIR
-    command: str | None = None  # For COMMAND method
+    command: list[str] | None = None  # For COMMAND method (list form, no shell)
     pattern: str | None = None  # For DELETE_FILES method
     size_bytes: int = 0
     exists: bool = False
