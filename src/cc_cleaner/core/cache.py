@@ -9,8 +9,8 @@ from typing import Any
 CACHE_DIR = Path.home() / ".cache" / "cc-cleaner"
 CACHE_FILE = CACHE_DIR / "scan_cache.json"
 
-# Cache expires after 60 seconds
-CACHE_TTL_SECONDS = 60
+# Cache expires after 5 minutes
+CACHE_TTL_SECONDS = 300
 
 
 def _ensure_cache_dir() -> None:
