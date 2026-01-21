@@ -39,6 +39,9 @@ cc-cleaner clean all -n    # 预览模式（不实际删除）
 ```
 
 **交互式模式**（直接运行 `cc-cleaner clean`）：
+
+![交互式模式](docs/interactive-mode.png)
+
 - ↑/↓ 移动光标
 - 空格 切换选择
 - `s` 只选安全项，`a` 全选，`n` 全不选

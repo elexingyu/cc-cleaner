@@ -39,6 +39,9 @@ cc-cleaner clean all -n    # Dry run (preview only)
 ```
 
 **Interactive mode** (just run `cc-cleaner clean`):
+
+![Interactive Mode](docs/interactive-mode.png)
+
 - Use ↑/↓ to navigate
 - Space to toggle selection
 - `s` for safe items only, `a` for all, `n` for none
