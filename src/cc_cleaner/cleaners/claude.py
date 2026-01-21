@@ -73,4 +73,36 @@ class ClaudeCleaner(BaseCleaner):
                     )
                 )
 
+        # ~/.local/share/claude - additional Claude Code data (sessions, etc.)
+        local_share_claude = expand_path("~/.local/share/claude")
+        if local_share_claude.exists():
+            size = get_dir_size(local_share_claude)
+            targets.append(
+                CleanTarget(
+                    name="claude/local-data",
+                    path=local_share_claude,
+                    description="Claude Code local data (sessions, history)",
+                    risk_level=RiskLevel.MODERATE,
+                    clean_method=CleanMethod.DELETE_DIR,
+                    size_bytes=size,
+                    exists=True,
+                )
+            )
+
+        # ~/Library/Caches/claude-cli-nodejs - Claude CLI cache (macOS)
+        cli_cache = expand_path("~/Library/Caches/claude-cli-nodejs")
+        if cli_cache.exists():
+            size = get_dir_size(cli_cache)
+            targets.append(
+                CleanTarget(
+                    name="claude/cli-cache",
+                    path=cli_cache,
+                    description="Claude CLI Node.js cache",
+                    risk_level=RiskLevel.SAFE,
+                    clean_method=CleanMethod.DELETE_DIR,
+                    size_bytes=size,
+                    exists=True,
+                )
+            )
+
         return targets

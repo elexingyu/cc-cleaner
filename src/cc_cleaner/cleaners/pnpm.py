@@ -1,5 +1,7 @@
 """pnpm cache cleaner."""
 
+import platform
+
 from cc_cleaner.core import (
     BaseCleaner,
     CleanMethod,
@@ -23,7 +25,7 @@ class PnpmCleaner(BaseCleaner):
         """Get list of pnpm cache targets."""
         targets = []
 
-        # pnpm store (content-addressable storage)
+        # pnpm store (content-addressable storage) - Linux location
         pnpm_store = expand_path("~/.local/share/pnpm/store")
         store_exists = pnpm_store.exists()
         store_size = get_dir_size(pnpm_store) if store_exists else 0
@@ -41,7 +43,7 @@ class PnpmCleaner(BaseCleaner):
                 )
             )
 
-        # pnpm cache
+        # pnpm cache - Linux location
         pnpm_cache = expand_path("~/.cache/pnpm")
         cache_exists = pnpm_cache.exists()
         cache_size = get_dir_size(pnpm_cache) if cache_exists else 0
@@ -58,5 +60,22 @@ class PnpmCleaner(BaseCleaner):
                     exists=cache_exists,
                 )
             )
+
+        # macOS: ~/Library/pnpm - pnpm store and state
+        if platform.system() == "Darwin":
+            pnpm_library = expand_path("~/Library/pnpm")
+            if pnpm_library.exists():
+                size = get_dir_size(pnpm_library)
+                targets.append(
+                    CleanTarget(
+                        name="pnpm/library",
+                        path=pnpm_library,
+                        description="pnpm store and state (macOS)",
+                        risk_level=RiskLevel.MODERATE,
+                        clean_method=CleanMethod.DELETE_DIR,
+                        size_bytes=size,
+                        exists=True,
+                    )
+                )
 
         return targets

@@ -92,11 +92,20 @@ def is_path_safe(path: Path) -> tuple[bool, str]:
             # First-level directory - only allow known cache directories
             first_level = parts[0]
             allowed_first_level = {
+                # Package managers
                 ".cache", ".local", ".npm", ".yarn", ".pnpm-store",
                 ".cargo", ".rustup", ".gradle", ".cocoapods",
-                ".claude", ".cursor", ".copilot",
                 ".uv", ".pip", ".go",
-                "Library",  # macOS - further checks below
+                # AI coding tools
+                ".claude", ".cursor", ".copilot",
+                # Runtime version managers
+                ".nvm", ".bun",
+                # Python environments
+                ".virtualenvs",
+                # AI/ML models
+                ".ollama",
+                # macOS - further checks below
+                "Library",
             }
             if first_level not in allowed_first_level:
                 return False, f"Not a known cache directory: ~/{first_level}"

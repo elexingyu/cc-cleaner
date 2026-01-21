@@ -32,10 +32,17 @@ pip install cc-cleaner     # pip
 
 ```bash
 cc-cleaner status          # See what's eating your disk
+cc-cleaner clean           # Interactive mode (select what to clean)
 cc-cleaner clean all       # Clean all safe caches
 cc-cleaner clean claude    # Clean specific tool
 cc-cleaner clean all -n    # Dry run (preview only)
 ```
+
+**Interactive mode** (just run `cc-cleaner clean`):
+- Use ↑/↓ to navigate
+- Space to toggle selection
+- `s` for safe items only, `a` for all, `n` for none
+- Enter to confirm, `q` to cancel
 
 **Example output:**
 
@@ -55,13 +62,15 @@ $ cc-cleaner status
 Total cleanable: 7.5 GB
 ```
 
-## Supported Cleaners
+## Supported Cleaners (22 total)
 
 | Category | Tools |
 |----------|-------|
 | **AI Coding** | Claude Code |
-| **JavaScript** | npm, yarn, pnpm |
-| **Python** | pip, uv |
+| **AI/ML Models** | huggingface, pytorch, whisper, ollama |
+| **JavaScript** | npm, yarn, pnpm, bun, nvm |
+| **Python** | pip, uv, virtualenv |
+| **Browser** | browser-cache (Chrome/Safari/Firefox), playwright, browser-tools (Puppeteer/Selenium) |
 | **Others** | cargo, go, gradle, cocoapods, homebrew, docker |
 
 ## Risk Levels

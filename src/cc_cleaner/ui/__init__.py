@@ -13,12 +13,14 @@ from .console import (
     print_success,
     print_warning,
 )
+from .interactive import interactive_select
 
 __all__ = [
     "confirm_clean",
     "console",
     "create_progress",
     "create_scan_progress",
+    "interactive_select",
     "print_clean_results",
     "print_cleaner_detail",
     "print_cleaner_list",

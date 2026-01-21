@@ -21,6 +21,7 @@ from .registry import (
 from .scanner import expand_path, get_dir_size, get_files_size, path_exists
 from .security import SecurityError, validate_command, validate_path_for_deletion
 from .version import check_for_update, get_current_version, get_upgrade_message
+from .cache import clear_scan_cache, get_cache_age, load_scan_cache, save_scan_cache
 
 __all__ = [
     "BaseCleaner",
@@ -48,4 +49,8 @@ __all__ = [
     "SecurityError",
     "validate_command",
     "validate_path_for_deletion",
+    "clear_scan_cache",
+    "get_cache_age",
+    "load_scan_cache",
+    "save_scan_cache",
 ]

@@ -1,6 +1,9 @@
 """Cleaners module - import all cleaners to register them."""
 
 from . import (
+    browser_cache,
+    browser_tools,
+    bun,
     cargo,
     claude,
     cocoapods,
@@ -8,14 +11,24 @@ from . import (
     go,
     gradle,
     homebrew,
+    huggingface,
     npm,
+    nvm,
+    ollama,
     pip,
+    playwright,
     pnpm,
+    pytorch,
     uv,
+    virtualenv,
+    whisper,
     yarn,
 )
 
 __all__ = [
+    "browser_cache",
+    "browser_tools",
+    "bun",
     "cargo",
     "claude",
     "cocoapods",
@@ -23,9 +36,16 @@ __all__ = [
     "go",
     "gradle",
     "homebrew",
+    "huggingface",
     "npm",
+    "nvm",
+    "ollama",
     "pip",
+    "playwright",
     "pnpm",
+    "pytorch",
     "uv",
+    "virtualenv",
+    "whisper",
     "yarn",
 ]

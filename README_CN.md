@@ -32,10 +32,17 @@ pip install cc-cleaner     # pip
 
 ```bash
 cc-cleaner status          # 查看磁盘占用
+cc-cleaner clean           # 交互式选择（推荐）
 cc-cleaner clean all       # 清理所有安全缓存
 cc-cleaner clean claude    # 清理指定工具
 cc-cleaner clean all -n    # 预览模式（不实际删除）
 ```
+
+**交互式模式**（直接运行 `cc-cleaner clean`）：
+- ↑/↓ 移动光标
+- 空格 切换选择
+- `s` 只选安全项，`a` 全选，`n` 全不选
+- 回车确认，`q` 取消
 
 **示例输出：**
 
@@ -55,13 +62,15 @@ $ cc-cleaner status
 Total cleanable: 7.5 GB
 ```
 
-## 支持的清理器
+## 支持的清理器（共 22 个）
 
 | 分类 | 工具 |
 |------|------|
 | **AI 编程** | Claude Code |
-| **JavaScript** | npm, yarn, pnpm |
-| **Python** | pip, uv |
+| **AI/ML 模型** | huggingface, pytorch, whisper, ollama |
+| **JavaScript** | npm, yarn, pnpm, bun, nvm |
+| **Python** | pip, uv, virtualenv |
+| **浏览器** | browser-cache (Chrome/Safari/Firefox), playwright, browser-tools (Puppeteer/Selenium) |
 | **其他** | cargo, go, gradle, cocoapods, homebrew, docker |
 
 ## 风险等级
